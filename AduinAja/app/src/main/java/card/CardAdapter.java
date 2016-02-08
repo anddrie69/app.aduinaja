@@ -46,7 +46,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
         viewHolder.txtWaktu.setText(mDataset.get(position).getWaktu());
         //viewHolder.imgPost.setImageUrl(MainApplication.urlGetImages + mDataset.get(position).getImg(), imageLoader);
         Picasso.with(mDataset.get(position).getContext())
-                .load(MainApplication.urlGetImages + mDataset.get(position).getImgAvatar())
+                .load(mDataset.get(position).getImgAvatar())
                 .resize(360,540)
                 .centerCrop()
                 .placeholder(ContextCompat.getDrawable(mDataset.get(position).getContext(), R.drawable.pp))
@@ -58,20 +58,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
                 .placeholder(ContextCompat.getDrawable(mDataset.get(position).getContext(), R.drawable.img_post))
                 .into(viewHolder.imgPost);
         switch (mDataset.get(position).getStatus()){
-            case "1111":
+            case "1":
                 viewHolder.txtStatus.setText("Diterima");
                 viewHolder.linear.setBackgroundColor(Color.parseColor("#FFDDB004"));
                 break;
-            case "2222":
+            case "2":
                 viewHolder.txtStatus.setText("Ditindaklanjuti");
                 viewHolder.linear.setBackgroundColor(Color.parseColor("#FF009ADA"));
                 break;
-            case "3333":
+            case "3":
                 viewHolder.txtStatus.setText("Ditolak");
                 viewHolder.linear.setBackgroundColor(Color.parseColor("#FFCF4038"));
                 break;
         }
         viewHolder.txtStatus.setTextColor(Color.parseColor("#FFFFFF"));
+        viewHolder.txtNama.setText(mDataset.get(position).getNama());
+        viewHolder.up_count.setText(mDataset.get(position).getUpVote());
+        viewHolder.down_count.setText(mDataset.get(position).getDownVote());
+        viewHolder.comment_count.setText(mDataset.get(position).getComments());
+
     }
 
     public void addItem(DataLaporan dataObj, int index) {
@@ -104,6 +109,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
         public LinearLayout LUp;
         public LinearLayout LDown;
         public LinearLayout LComment;
+        public TextView up_count;
+        public TextView down_count;
+        public TextView comment_count;
+
 
         public DataObjectHolder(View itemView) {
             super(itemView);
@@ -117,6 +126,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
             LUp = (LinearLayout)itemView.findViewById(R.id.linear_up);
             LDown = (LinearLayout)itemView.findViewById(R.id.linear_down);
             LComment = (LinearLayout)itemView.findViewById(R.id.linear_comment);
+            up_count = (TextView)itemView.findViewById(R.id.up_count);
+            down_count = (TextView)itemView.findViewById(R.id.down_count);
+            comment_count = (TextView)itemView.findViewById(R.id.comment_count);
             Log.i(MainApplication.TAG, "Adding Listener");
         }
     }

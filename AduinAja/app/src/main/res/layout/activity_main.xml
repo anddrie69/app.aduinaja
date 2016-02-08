@@ -120,11 +120,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="top|center_vertical|right"
-                    android:gravity="right"
+                    android:gravity="clip_horizontal|right"
                     android:id="@+id/linear_status"
                     android:padding="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@color/colorPrimary">
+                    android:layout_marginLeft="30dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginRight="15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -132,10 +133,8 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Small Text"
                         android:id="@+id/txtStatus"
-                        android:shadowRadius="4"
-                        android:layout_gravity="center"
                         android:textColor="#FFFFFF"
-                        android:layout_marginRight="15dp"/>
+                        android:gravity="center_horizontal" />
 
 
                 </LinearLayout>

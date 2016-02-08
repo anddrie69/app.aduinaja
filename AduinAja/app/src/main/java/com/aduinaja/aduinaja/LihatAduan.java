@@ -34,6 +34,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -67,6 +68,7 @@ public class LihatAduan extends Fragment {
     SharedPreferences.Editor editor;
     private static final String KEY_TITLE = "title";
 
+
     public LihatAduan() {
     }
 
@@ -74,7 +76,7 @@ public class LihatAduan extends Fragment {
         LihatAduan f = new LihatAduan();
 
         Bundle args = new Bundle();
-        args.putString(KEY_TITLE, title);
+        //args.putString(KEY_TITLE, title);
         f.setArguments(args);
 
         return (f);
@@ -85,7 +87,7 @@ public class LihatAduan extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_aduan, container, false);
 
-        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        /*Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(getActivity(), R.color.white));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -93,7 +95,7 @@ public class LihatAduan extends Fragment {
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"Museo_Slab_2.otf");
         TextView title = (TextView)toolbar.findViewById(R.id.toolbar_title);
         title.setText("aduinaja");
-        title.setTypeface(tf);
+        title.setTypeface(tf);*/
 
         /*pref = getActivity().getApplicationContext().getSharedPreferences("AtadResu", getActivity().MODE_PRIVATE);
         editor = pref.edit();*/
@@ -114,14 +116,14 @@ public class LihatAduan extends Fragment {
         TelephonyManager tMgr = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         final String imei = tMgr.getDeviceId();
 
-        new getLaporan(getContext()).execute();
+        new getLaporan(getContext(),getArguments().getString("category")).execute();
 
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 checkNetwork();
 
-                new getLaporan(getContext()).execute();
+                new getLaporan(getContext(),getArguments().getString("category")).execute();
             }
         });
 
@@ -139,9 +141,11 @@ public class LihatAduan extends Fragment {
         StringBuilder sb;
         String result = null;
         ProgressDialog loading;
+        String category;
         //DataStore db;
 
-        public getLaporan(Context ctx) {
+        public getLaporan(Context ctx, String category) {
+            this.category = category;
             loading = new ProgressDialog(ctx);
             loading.setTitle("Tunggu Sebentar");
             loading.setMessage("Mengambil Data . . .");
@@ -164,8 +168,8 @@ public class LihatAduan extends Fragment {
         protected Void doInBackground(Void... params) {
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(MainApplication.urlGetLaporan);
-                HttpResponse response = httpClient.execute(httpPost);
+                HttpGet httpGet = new HttpGet(MainApplication.urlGetLaporan);
+                HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity entity = response.getEntity();
                 is = entity.getContent();
             } catch (UnsupportedEncodingException e) {
@@ -206,11 +210,13 @@ public class LihatAduan extends Fragment {
                 JSONObject dataObj = new JSONObject(result);
                 if(dataObj.getString("status").equals("2")) {
                     JSONArray data = dataObj.getJSONArray("data");
+
                     ArrayList results = new ArrayList<DataLaporan>();
                     String waktu = "";
                     for (int i = 0; i < data.length(); i++) {
-                        String rawDate = data.getJSONObject(i).getString("tanggal_aduan").split(" ")[0];
-                        String rawTime = data.getJSONObject(i).getString("tanggal_aduan").split(" ")[1];
+
+                        String rawDate = data.getJSONObject(i).getJSONObject("aduan").getString("tanggal_aduan").split(" ")[0];
+                        String rawTime = data.getJSONObject(i).getJSONObject("aduan").getString("tanggal_aduan").split(" ")[1];
                         String[] date = rawDate.split("-");
                         String[] time = rawTime.split(":");
                         if((Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - Integer.parseInt(date[2])) <= 0) {
@@ -240,16 +246,24 @@ public class LihatAduan extends Fragment {
                             }
                             waktu = str;
                         }
-                        DataLaporan obj = new DataLaporan(
-                                data.getJSONObject(i).getString("foto"),
-                                data.getJSONObject(i).getString("nama"),
-                                data.getJSONObject(i).getString("tanggal_aduan"),
-                                data.getJSONObject(i).getString("img"),
-                                data.getJSONObject(i).getString("judul"),
-                                data.getJSONObject(i).getString("status"),
-                                LihatAduan.this.getContext()
-                                );
-                        results.add(i, obj);
+
+                        if(data.getJSONObject(i).getJSONObject("aduan").getString("nama_category").equals(category)) {
+
+                            DataLaporan obj = new DataLaporan(
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("foto"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("nama_member"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("tanggal_aduan"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("img"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("judul"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("status"),
+                                    data.getJSONObject(i).getString("up_vote"),
+                                    data.getJSONObject(i).getString("down_vote"),
+                                    data.getJSONObject(i).getString("comments"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("nama_category"),
+                                    LihatAduan.this.getContext()
+                            );
+                            results.add(obj);
+                        }
                     }
                     mAdapter = new CardAdapter(results);
                     mRecyclerView.setAdapter(mAdapter);

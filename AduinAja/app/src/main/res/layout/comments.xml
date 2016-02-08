@@ -151,7 +151,7 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="#ffffff"
                 android:layout_gravity="center_vertical"
-                android:textAllCaps="true"
+                android:textAllCaps="false"
                 android:textSize="14dp"/>
 
         </LinearLayout>

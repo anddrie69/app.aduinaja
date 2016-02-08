@@ -15,10 +15,8 @@ public class MainApplication extends Application {
     public static String mainUrl = "http://adm.aduinaja.com";
     public static String urlLaporan = mainUrl+"/client/berikanLaporan";
     public static String urlGetLaporan = mainUrl+"/backend/web/index.php?r=api/getaduan";
-    public static String urlGetImages = mainUrl+"/statics/images/";
-    public static String urlGetNews = mainUrl+"/client/getNews";
+    public static String urlGetImages = mainUrl+"/backend/web/statics/aduan";
     public static String urlGetKategori = mainUrl+"/backend/web/index.php?r=api/getkategori";
-    public static String urlGetJmlTPS = mainUrl+"/client/getJmlTPS2";
     private static MainApplication app;
 
     public static final String TAG = MainApplication.class.getSimpleName();

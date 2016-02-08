@@ -14,4 +14,25 @@
     verifikasi NIK, maka Pengadu menyatakan setuju dan terikat dengan Ketentuan dan Kebijakan yang belaku serta apabila ada perubahan.
     </string>
     <string name="desc_dummy">Di desa nglumpang kecamatan Mlarak terdapat air terjun keren banget. Dateng kesini ya gaess.</string>
+    <string name="tab1">Transportasi</string>
+    <string name="tab2">Pariwisata</string>
+    <string name="tab3">Lingkungan</string>
+    <string name="tab4">Infrastruktur</string>
+    <string name="tab5">Kriminal</string>
+    <string name="tab6">Sosial</string>
+    <string name="tab7">Budaya</string>
+
+    <string name="activity_camera_intent_start_camera_button">Take a picture!</string>
+    <string name="activity_camera_intent_image_view_desc">Photo</string>
+    <string name="activity_camera_intent_photo_uri_found">Photo uri found: </string>
+    <string name="activity_camera_intent_photo_uri_not_found">Photo uri not found!</string>
+
+    <string name="warning_camera_intent_canceled">Camera Intent was canceled by user.</string>
+
+    <string name="error_sd_card_not_mounted">External storage is required. Your SD card is most likely not mounted.</string>
+    <string name="error_could_not_take_photo">There was an issue with your camera. We are very sorry for the inconvenience!</string>
+    <string name="error_sth_went_wrong">Something went wrong. Please try again.</string>
+    <string name="btn_laporkan_kecurangan">Laporkan Kecurangan</string>
+    <string name="pilih_kategori">Pilih Kategori</string>
+
 </resources>

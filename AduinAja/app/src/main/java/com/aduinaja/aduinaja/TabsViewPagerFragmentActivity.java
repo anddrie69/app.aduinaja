@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.Toolbar;
@@ -16,7 +17,7 @@ import java.util.Vector;
 /**
  * Created by Triyandi on 06/02/2016.
  */
-public class TabsViewPagerFragmentActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener{
+public class TabsViewPagerFragmentActivity extends AppCompatActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener{
 
     private TabHost mTabHost;
     private ViewPager mViewPager;
@@ -118,9 +119,11 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("nama_category").setIndicator("Transportasi"),(tabInfo = new TabInfo("nama_category", LihatAduan.class, args)));
+        this.mapTabInfo.put(tabInfo.tag, tabInfo);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Transportasi").setIndicator("Transportasi"), (tabInfo = new TabInfo("Transportasi", LihatAduan.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Infrastruktur").setIndicator("Infrastruktur"), (tabInfo = new TabInfo("Infrastruktur", LihatAduan.class, args)));
+        /*TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Infrastruktur").setIndicator("Infrastruktur"), (tabInfo = new TabInfo("Infrastruktur", LihatAduan.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Kriminal").setIndicator("Kriminal"), (tabInfo = new TabInfo("Kriminal", LihatAduan.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
@@ -133,11 +136,11 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Pendidikan").setIndicator("Pendidikan"), (tabInfo = new TabInfo("Pendidikan", LihatAduan.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Kesehatan").setIndicator("Kesehatan"), (tabInfo = new TabInfo("Kesehatan", LihatAduan.class, args)));
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
+        this.mapTabInfo.put(tabInfo.tag, tabInfo);*/
 
         //Default to first tab
-        this.onTabChanged("Transportasi");
 
+        //this.onTabChanged("Transportasi");
         mTabHost.setOnTabChangedListener(this);
     }
 
@@ -158,7 +161,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
      * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
      */
     public void onTabChanged(String tag) {
-        //TabInfo newTab = this.mapTabInfo.get(tag);
+        TabInfo newTab = this.mapTabInfo.get(tag);
         int pos = this.mTabHost.getCurrentTab();
         this.mViewPager.setCurrentItem(pos);
     }

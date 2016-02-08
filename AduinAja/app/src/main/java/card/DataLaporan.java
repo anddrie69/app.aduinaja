@@ -12,15 +12,24 @@ public class DataLaporan {
     private String imgPost;
     private String title;
     private String status;
+    private String upVote;
+    private String downVote;
+    private String comments;
+    private String category;
     private Context context;
 
-    public DataLaporan(String imgAvatar, String nama, String waktu, String imgPost, String title, String status, Context context) {
+    public DataLaporan(String imgAvatar, String nama, String waktu, String imgPost, String title, String status, String upVote, String downVote, String comments, String category, Context context) {
+
         this.imgAvatar = imgAvatar;
         this.nama = nama;
         this.waktu = waktu;
         this.imgPost = imgPost;
         this.title = title;
         this.status = status;
+        this.upVote = upVote;
+        this.downVote = downVote;
+        this.comments = comments;
+        this.category = category;
         this.context = context;
     }
 
@@ -70,6 +79,38 @@ public class DataLaporan {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUpVote() {
+        return upVote;
+    }
+
+    public void setUpVote(String upVote) {
+        this.upVote = upVote;
+    }
+
+    public String getDownVote() {
+        return downVote;
+    }
+
+    public void setDownVote(String downVote) {
+        this.downVote = downVote;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getCategory() {
+        return comments;
+    }
+
+    public void setCategory(String category) {
+        this.comments = category;
     }
 
     public Context getContext() {

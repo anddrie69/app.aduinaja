@@ -1,6 +1,8 @@
 package com.aduinaja.aduinaja;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -23,12 +25,24 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.loginfb);
+        SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if(sp.contains("First")){
+            boolean isFirst = sp.getBoolean("First",true);
+            if(!isFirst){
+                startActivity(new Intent(this, LihatAduan.class));
+                finish();
+            }
+        }else {
+            editor.putBoolean("First",false);
+            editor.commit();
+        }
         ThemeManager.init(this, 2, 0, null);
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent next = new Intent(MainActivity.this, TabsViewPagerFragmentActivity.class );
+                Intent next = new Intent(MainActivity.this, TabFragment.class );
                 startActivity(next);
             }
 
