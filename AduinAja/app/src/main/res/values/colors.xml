@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1fa2ed</color>
+    <color name="colorPrimaryDark">#1fa2ed</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorControlNormal">#AAA</color>
+    <color name="colorControlActivated">#FFD20607</color>
+    <color name="colorSwitchThumbNormal">#FF78909C</color>
+
+    <color name="colorPrimaryQuarter">#33E32728</color>
+    <color name="colorPrimaryHalf">#90E32728</color>
+    <color name="colorControlNormalHalf">#9078909C</color>
+    <color name="colorAccentQuarter">#33D71516</color>
+    <color name="colorControlActivatedHalf">#90D20607</color>
+    <color name="colorAccentHalf">#90D71516</color>
+
+    <array name="progress_colors_light">
+        <item>#FF03A9F4</item>
+        <item>#FFD8433C</item>
+        <item>#FFF2AF3A</item>
+        <item>#FF279B5E</item>
+    </array>
+
+    <array name="progress_colors_dark">
+        <item>#FF00E5FF</item>
+        <item>#FFD81D5A</item>
+        <item>#FFF27512</item>
+        <item>#FF63BC34</item>
+    </array>
+
+    <array name="in_colors_light">
+        <item>#4B03A9F4</item>
+        <item>#3303A9F4</item>
+        <item>#1903A9F4</item>
+    </array>
+
+    <array name="in_colors_dark">
+        <item>#4B00E5FF</item>
+        <item>#3300E5FF</item>
+        <item>#1900E5FF</item>
+    </array>
+
+    <color name="tpi_checked">#FFFFFFFF</color>
+    <color name="tpi_unchecked">#99FFFFFF</color>
+
+    <color name="et_divider_focused">@color/colorControlActivated</color>
+    <color name="et_divider_not_focused">#FF6D6D6D</color>
+    <color name="et_divider_disable">#FFC1C1C1</color>
+
+    <color name="gradient_start">#50000000</color>
+    <color name="foreground_material_light">#AAA</color>
+    <color name="primary_text_default_material_light">#AAA</color>
+    <color name="background_material_light">#fff</color>
+    <color name="white">#ffffff</color>
+    <color name="backgroundDrawer">#FF292E31</color>
+    <color name="selectedDrawer">#FF232729</color>
+    <color name="textDrawer">#FFE1E1E1</color>
+    <color name="bulletUnactive">#B0B0B0</color>
+
+    <color name="diterima">#FFDDB004</color>
+    <color name="ditindaklanjuti">#FF009ADA</color>
+    <color name="terlaksana">#FF7BC60E</color>
+    <color name="ditolak">#FFCF4038</color>
+    <color name="transparent_bg">#fff</color>
+</resources>

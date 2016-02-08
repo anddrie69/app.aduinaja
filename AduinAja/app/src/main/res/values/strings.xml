@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">AduinAja</string>
+    <string name="screen1_desc">Aplikasi Pelaporan Warga terhadap Pemerintah Daerah</string>
+    <string name="screen2_desc">Laporkan kejadian disekitar Anda untuk diketahui oleh Pemerintah</string>
+    <string name="screen3_desc">Pemerintah akan menerima aduan Anda dan melakukan investigasi serta tindak lanjut</string>
+    <string name="about_aduin">Aplikasi pelaporan warga kepada Pemerintah Daerah, yang nantinya akan dilakukan investigasi aduan dan ditindaklanjuti oleh SKPD terkait.</string>
+    <string name="loginfb_desc">Silahkan login dengan facebook, \n untuk mendapatkan akses melihat Timeline Aduan \n Terima Kasih</string>
+    <string name="facebook_app_id">900999039939643</string>
+    <string name="about">AduinAja diambil dari kata Aduin dan Aja yang berarti kalimat perintah untuk mengadukan sesuatu.
+    Dimana aplikasi ini menghubungan antara Pengadu (sebutan member) yang dalam konteks ini adalah masyarakat dengan Pemerintah Daerah atau
+    SKPD terkait. Jadi apabila ada sesuatu yang perlu diadukan kepada Pemerintah, aplikasi bisa menjadi alternatif yang mengakomodir permasalahan tersebut.</string>
+
+    <string name="ketentuan_kebijakan">Pengadu wajib membaca Ketentuan dan Kebijakan yang berlaku pada aplikasi ini dengan cermat. Dengan melakukan
+    verifikasi NIK, maka Pengadu menyatakan setuju dan terikat dengan Ketentuan dan Kebijakan yang belaku serta apabila ada perubahan.
+    </string>
+    <string name="desc_dummy">Di desa nglumpang kecamatan Mlarak terdapat air terjun keren banget. Dateng kesini ya gaess.</string>
+</resources>
