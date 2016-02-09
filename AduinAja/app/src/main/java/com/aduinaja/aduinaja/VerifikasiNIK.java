@@ -68,15 +68,15 @@ public class VerifikasiNIK extends AppCompatActivity {
         // Obtain the shared Tracker instance.
         /*final Tracker t = ((MainApplication) getApplication())
                 .getTracker(MainApplication.TrackerName.APP_TRACKER);*/
-        t.setScreenName("Verifikasi");
-        t.send(new HitBuilders.AppViewBuilder().build());
+        //t.setScreenName("Verifikasi");
+        //t.send(new HitBuilders.AppViewBuilder().build());
 
         pref = getApplicationContext().getSharedPreferences("AtadResu", MODE_PRIVATE);
         editor = pref.edit();
 
         if(pref.contains("nik") && pref.contains("nama")){
-            Intent intent = new Intent(this, MainMenu.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, MainMenu.class);
+            //startActivity(intent);
             finish();
         }
 
@@ -93,10 +93,10 @@ public class VerifikasiNIK extends AppCompatActivity {
                 //startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
                 //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 if(!nik.getText().toString().equals("") || !nama.getText().toString().equals("")) {
-                    t.send(new HitBuilders.EventBuilder()
-                            .setCategory("Action")
-                            .setAction("Login")
-                            .build());
+                    //t.send(new HitBuilders.EventBuilder()
+                            //.setCategory("Action")
+                            //.setAction("Login")
+                            //.build());
                     if(checkNetwork())
                         new Login().execute();
                 }else{
@@ -109,7 +109,7 @@ public class VerifikasiNIK extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -121,9 +121,9 @@ public class VerifikasiNIK extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == R.id.action_settings) {
+            //return true;
+        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -143,25 +143,25 @@ public class VerifikasiNIK extends AppCompatActivity {
             namaLogin = nama.getText().toString();
             is = null;
             sb = null;
-            loading = new ProgressDialog(MainActivity.this);
-            loading.setTitle("Tunggu Sebentar");
-            loading.setMessage("Melakukan Autentifikasi . . .");
-            loading.setCancelable(false);
-            loading.show();
+            //loading = new ProgressDialog(MainActivity.this);
+            //loading.setTitle("Tunggu Sebentar");
+            //loading.setMessage("Melakukan Autentifikasi . . .");
+            //loading.setCancelable(false);
+            //loading.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("nik", nikLogin));
-            nameValuePairs.add(new BasicNameValuePair("nama", StringHelper.upperCase(namaLogin)));
+            //nameValuePairs.add(new BasicNameValuePair("nama", StringHelper.upperCase(namaLogin)));
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(MainApplication.urlLogin);
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpClient.execute(httpPost);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
+                //HttpPost httpPost = new HttpPost(MainApplication.urlLogin);
+                //httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                //HttpResponse response = httpClient.execute(httpPost);
+                //HttpEntity entity = response.getEntity();
+                //is = entity.getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"),8);
                 sb = new StringBuilder();
                 sb.append(reader.readLine() + "\n");
@@ -214,8 +214,8 @@ public class VerifikasiNIK extends AppCompatActivity {
                     editor.putString("kabupaten_kota", data.getString("kab"));
                     editor.putString("provinsi", data.getString("pro"));
                     editor.commit();
-                    Intent intent = new Intent(MainActivity.this, MainMenu.class);
-                    startActivity(intent);
+                    //Intent intent = new Intent(MainActivity.this, MainMenu.class);
+                    //startActivity(intent);
                     finish();
                 }else if(dataObj.getInt("status") == 0) {
                     //Toast.makeText(MainActivity.this,"Maaf Login gagal. Silakan coba beberapa saat lagi.", Toast.LENGTH_LONG).show();

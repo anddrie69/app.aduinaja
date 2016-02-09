@@ -17,7 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.inovativo.unfair.client.R;
+import com.aduinaja.aduinaja.R;
+
 
 /**
  * Created by elmee on 02/11/2015.
@@ -31,7 +32,7 @@ public class ImageWindow extends RelativeLayout {
     private float mCloseButtonMargin = 5; //google messenger approx 27
     private int mCloseColor = 0xffff7b57; //google messenger approx 27
     private float mCornerRadius = 7; //google messenger approx 27
-    private int mCloseIcon = R.drawable.ic_action_close;
+    //private int mCloseIcon = R.drawable.ic_action_close;
     private ImageView mImageView;
     private float mTopLeftMargin = 10f;
 
@@ -65,7 +66,7 @@ public class ImageWindow extends RelativeLayout {
             if (attr == R.styleable.ImageWindow_close_color) {
                 mCloseColor = a.getColor(R.styleable.ImageWindow_close_color, 0xffff7b57); //orange
             } else if (attr == R.styleable.ImageWindow_close_icon) {
-                mCloseIcon = a.getResourceId(R.styleable.ImageWindow_close_icon, R.drawable.ic_action_close);
+                //mCloseIcon = a.getResourceId(R.styleable.ImageWindow_close_icon, R.drawable.ic_action_close);
             } else if (attr == R.styleable.ImageWindow_close_margin) {
                 mCloseButtonMargin = a.getDimension(R.styleable.ImageWindow_close_margin, 5f * density);
             } else if (attr == R.styleable.ImageWindow_close_size) {
@@ -90,10 +91,10 @@ public class ImageWindow extends RelativeLayout {
         shapePressed.setColorFilter(mCloseColor - 0x444444, PorterDuff.Mode.SRC_ATOP);//a little bit darker
         drawable.addState(new int[]{android.R.attr.state_pressed}, shapePressed);
         drawable.addState(new int[]{}, shape);
-        closeButton.setImageResource(mCloseIcon);
+        //closeButton.setImageResource(mCloseIcon);
         closeButton.setBackground(drawable); //todo change this to support lower api
         closeButton.setClickable(true);
-        closeButton.setId(R.id.closeId);
+        //closeButton.setId(R.id.closeId);
         mImageView = new CustomImageView(getContext(), mCloseButtonSize, mCloseButtonMargin, mCornerRadius);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(Math.round(mTopLeftMargin), Math.round(mTopLeftMargin), 0, 0);
@@ -139,13 +140,13 @@ public class ImageWindow extends RelativeLayout {
         mCornerRadius = cornerRadius;
     }
 
-    public int getCloseIcon() {
-        return mCloseIcon;
-    }
+    //public int getCloseIcon() {
+        //return mCloseIcon;
+    //}
 
-    public void setCloseIcon(int closeIcon) {
-        mCloseIcon = closeIcon;
-    }
+    //public void setCloseIcon(int closeIcon) {
+        //mCloseIcon = closeIcon;
+    //}
 
     public float getTopLeftMargin() {
         return mTopLeftMargin;
@@ -155,14 +156,14 @@ public class ImageWindow extends RelativeLayout {
         mTopLeftMargin = topLeftMargin;
     }
 
-    public void setOnCloseListener(final OnCloseListener onCloseListener) {
-        findViewById(R.id.closeId).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCloseListener.onCloseClick(ImageWindow.this);
-            }
-        });
-    }
+    //public void setOnCloseListener(final OnCloseListener onCloseListener) {
+        //findViewById(R.id.closeId).setOnClickListener(new OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+               // onCloseListener.onCloseClick(ImageWindow.this);
+            //}
+        //});
+    //}
     //***********************************************
 
     static class CustomImageView extends ImageView {

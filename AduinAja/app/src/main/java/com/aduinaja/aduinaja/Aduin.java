@@ -558,13 +558,13 @@ public class Aduin extends AppCompatActivity {
             bao = new ByteArrayOutputStream();
             rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             byte [] ba = bao.toByteArray();
-            String ba1 = Base64.encodeBytes(ba);
+            // String ba1 = Base64.encodeBytes(ba);
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("nik", pref.getString("nik", "")));
             nameValuePairs.add(new BasicNameValuePair("email", email));
             nameValuePairs.add(new BasicNameValuePair("laporan",desc));
             nameValuePairs.add(new BasicNameValuePair("kategori",String.valueOf(kategori)));
-            nameValuePairs.add(new BasicNameValuePair("foto",ba1));
+            // nameValuePairs.add(new BasicNameValuePair("foto",ba1));
             nameValuePairs.add(new BasicNameValuePair("filename",pref.getString("nik","")+"-"+String.valueOf(System.currentTimeMillis())+".jpg"));
             nameValuePairs.add(new BasicNameValuePair("telepon",phone));
             nameValuePairs.add(new BasicNameValuePair("imei",imei));
