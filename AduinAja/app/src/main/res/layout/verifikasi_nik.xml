@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_nik">
 
-
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -52,10 +50,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Verifikasi"
+        android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:background="#1fa2ed"/>
 
 </LinearLayout>

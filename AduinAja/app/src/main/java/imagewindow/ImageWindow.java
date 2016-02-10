@@ -17,7 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.inovativo.unfair.client.R;
+import com.aduinaja.aduinaja.R;
+
 
 /**
  * Created by elmee on 02/11/2015.
@@ -91,9 +92,9 @@ public class ImageWindow extends RelativeLayout {
         drawable.addState(new int[]{android.R.attr.state_pressed}, shapePressed);
         drawable.addState(new int[]{}, shape);
         closeButton.setImageResource(mCloseIcon);
-        closeButton.setBackground(drawable); //todo change this to support lower api
+        //closeButton.setBackground(drawable); //todo change this to support lower api
         closeButton.setClickable(true);
-        closeButton.setId(R.id.closeId);
+        //closeButton.setId(R.id.closeId);
         mImageView = new CustomImageView(getContext(), mCloseButtonSize, mCloseButtonMargin, mCornerRadius);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(Math.round(mTopLeftMargin), Math.round(mTopLeftMargin), 0, 0);
@@ -155,14 +156,14 @@ public class ImageWindow extends RelativeLayout {
         mTopLeftMargin = topLeftMargin;
     }
 
-    public void setOnCloseListener(final OnCloseListener onCloseListener) {
+    /*ublic void setOnCloseListener(final OnCloseListener onCloseListener) {
         findViewById(R.id.closeId).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCloseListener.onCloseClick(ImageWindow.this);
             }
         });
-    }
+    }*/
     //***********************************************
 
     static class CustomImageView extends ImageView {

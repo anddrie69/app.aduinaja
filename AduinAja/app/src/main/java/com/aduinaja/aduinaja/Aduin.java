@@ -28,7 +28,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,11 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aduinaja.application.MainApplication;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.AccountPicker;
 import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.app.SimpleDialog;
@@ -79,6 +73,7 @@ import database.DataStore;
 import lib.BitmapHelper;
 import lib.CameraIntentHelper;
 import lib.CameraIntentHelperCallback;
+import network.Base64;
 
 
 /**
@@ -96,6 +91,7 @@ public class Aduin extends AppCompatActivity {
     private Bitmap bitmap;
     LinearLayout linear;
     EditText deskripsi;
+    //int kelurahan = 0, kecamatan = 0, tps = 0;
     DataStore db;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -105,7 +101,7 @@ public class Aduin extends AppCompatActivity {
     CameraIntentHelper mCameraIntentHelper;
     String filePath = null;
     Bitmap rotateBitmap;
-    Tracker t;
+    //Tracker t;
     int jmlTPS;
     Button btnTps;
 
@@ -116,14 +112,14 @@ public class Aduin extends AppCompatActivity {
 
         ThemeManager.init(this, 2, 0, null);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        /*Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_ab_up_compat);
         upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+*/
 
         progressBar = new ProgressDialog(this);
 
@@ -131,9 +127,9 @@ public class Aduin extends AppCompatActivity {
         editor = pref.edit();
 
         /*t = ((MainApplication) getApplication())
-                .getTracker(MainApplication.TrackerName.APP_TRACKER);*/
+                .getTracker(MainApplication.TrackerName.APP_TRACKER);
         t.setScreenName("Halaman Pelaporan");
-        t.send(new HitBuilders.AppViewBuilder().build());
+        t.send(new HitBuilders.AppViewBuilder().build());*/
 
         db = new DataStore(this);
 
@@ -213,7 +209,7 @@ public class Aduin extends AppCompatActivity {
                         btnKategori.setText("Kategori : " + getSelectedValue());
                         kategori = id[getSelectedIndex()];
                         Log.i("kategori","> "+kategori);
-                        //Toast.makeText(Aduin1.this, "Kategori : " + getSelectedValue(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(Laporkan1.this, "Kategori : " + getSelectedValue(), Toast.LENGTH_SHORT).show();
                         super.onPositiveActionClicked(fragment);
                     }
 
@@ -357,9 +353,9 @@ public class Aduin extends AppCompatActivity {
             case R.id.btnAduin:
                 if(kategori != 0 && !deskripsi.getText().toString().equals("")) {
                     try {
-                        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+                        /*Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                                 new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-                        startActivityForResult(intent,ACCOUNT_REQUEST_CODE);
+                        startActivityForResult(intent,ACCOUNT_REQUEST_CODE);*/
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -440,10 +436,10 @@ public class Aduin extends AppCompatActivity {
                             Toast.makeText(Aduin.this, "Silakan ambil gambar terlebih dahulu", Toast.LENGTH_LONG).show();
                         } else {
                             loading.setMessage("Silakan tunggu . . .");
-                            t.send(new HitBuilders.EventBuilder()
+                            /*t.send(new HitBuilders.EventBuilder()
                                     .setCategory("Action")
                                     .setAction("Lapor")
-                                    .build());
+                                    .build());*/
                             TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                             String mPhoneNumber = tMgr.getLine1Number();
                             String imei = tMgr.getDeviceId();
@@ -572,7 +568,7 @@ public class Aduin extends AppCompatActivity {
             // Extra parameters if you want to pass to server
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(MainApplication.urlLaporan);
+                HttpPost httpPost = new HttpPost(MainApplication.urlAduan);
                 //totalSize = entity.getContentLength();
                 httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 //httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -670,7 +666,7 @@ public class Aduin extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
@@ -684,6 +680,7 @@ public class Aduin extends AppCompatActivity {
         super.onStop();
         GoogleAnalytics.getInstance(Aduin.this).reportActivityStop(this);
     }
+*/
 
     private void DialogMessage(String pesan){
         Dialog.Builder builder = null;

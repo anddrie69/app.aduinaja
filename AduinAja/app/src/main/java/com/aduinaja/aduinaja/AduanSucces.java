@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.rey.material.widget.Button;
 
 /**
@@ -72,19 +71,19 @@ public class AduanSucces extends AppCompatActivity {
         return false;
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
         GoogleAnalytics.getInstance(AduanSucces.this)
                 .reportActivityStart(this);
-    }
-
+    }*/
+/*
     @Override
     protected void onStop() {
         // TODO Auto-generated method stub
         super.onStop();
         GoogleAnalytics.getInstance(AduanSucces.this).reportActivityStop(this);
-    }
+    }*/
 
 }

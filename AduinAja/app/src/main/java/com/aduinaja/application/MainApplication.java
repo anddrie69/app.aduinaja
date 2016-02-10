@@ -3,7 +3,6 @@ package com.aduinaja.application;
 import android.app.Application;
 import android.content.Context;
 
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;
 
@@ -13,10 +12,12 @@ import java.util.HashMap;
 public class MainApplication extends Application {
 
     public static String mainUrl = "http://adm.aduinaja.com";
-    public static String urlLaporan = mainUrl+"/client/berikanLaporan";
+    public static String urlAduan = mainUrl+"/backend/web/index.php?r=api/addnewaduan";
+    public static String urlRegister= mainUrl+"/backend/web/index.php?r=api/register";
     public static String urlGetLaporan = mainUrl+"/backend/web/index.php?r=api/getaduan";
     public static String urlGetImages = mainUrl+"/backend/web/statics/aduan";
     public static String urlGetKategori = mainUrl+"/backend/web/index.php?r=api/getkategori";
+    public static String urlVerifikasi = mainUrl+"/backend/web/index.php?r=api/verifikasinik&id=";
     private static MainApplication app;
 
     public static final String TAG = MainApplication.class.getSimpleName();
@@ -56,7 +57,7 @@ public class MainApplication extends Application {
         ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 
-    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+    /*HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();*/
 
    /* public synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
