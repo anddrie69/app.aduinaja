@@ -102,8 +102,6 @@ public class Aduin extends AppCompatActivity {
     String filePath = null;
     Bitmap rotateBitmap;
     //Tracker t;
-    int jmlTPS;
-    Button btnTps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +110,13 @@ public class Aduin extends AppCompatActivity {
 
         ThemeManager.init(this, 2, 0, null);
 
-        /*Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        /*setSupportActionBar(toolbar);*/
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_ab_up_compat);
         upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-*/
 
         progressBar = new ProgressDialog(this);
 
@@ -194,13 +191,14 @@ public class Aduin extends AppCompatActivity {
                 btnKategori.setEnabled(false);
 
                 ArrayList<ArrayList<Object>> dataKategori = db.getKategori();
+                Log.i("items", "> "+dataKategori.toString());
                 String[] items = new String[dataKategori.size()];
                 final int[] id = new int[dataKategori.size()];
                 for (int i = 0; i < dataKategori.size(); i++) {
                     ArrayList<Object> baris = dataKategori.get(i);
                     id[i] = Integer.parseInt(baris.get(0).toString());
                     items[i] = baris.get(1).toString();
-                    //Log.i("items", "> "+id[i]+" "+items[i]);
+                    Log.i("items", "> "+id[i]+" "+items[i]);
                 }
 
                 builder = new SimpleDialog.Builder(isLightTheme ? R.style.SimpleDialogLight : R.style.SimpleDialog) {
@@ -554,13 +552,13 @@ public class Aduin extends AppCompatActivity {
             bao = new ByteArrayOutputStream();
             rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
             byte [] ba = bao.toByteArray();
-            // String ba1 = Base64.encodeBytes(ba);
+            String ba1 = Base64.encodeBytes(ba);
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("nik", pref.getString("nik", "")));
             nameValuePairs.add(new BasicNameValuePair("email", email));
             nameValuePairs.add(new BasicNameValuePair("laporan",desc));
             nameValuePairs.add(new BasicNameValuePair("kategori",String.valueOf(kategori)));
-            // nameValuePairs.add(new BasicNameValuePair("foto",ba1));
+            nameValuePairs.add(new BasicNameValuePair("foto",ba1));
             nameValuePairs.add(new BasicNameValuePair("filename",pref.getString("nik","")+"-"+String.valueOf(System.currentTimeMillis())+".jpg"));
             nameValuePairs.add(new BasicNameValuePair("telepon",phone));
             nameValuePairs.add(new BasicNameValuePair("imei",imei));

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -48,41 +50,37 @@ import java.util.ArrayList;
  */
 public class VerifikasiNIK extends AppCompatActivity {
 
-    EditText nik, nama;
+    EditText nik;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.verifikasi_nik);
 
         ThemeManager.init(this, 2, 0, null);
         //Setting up the toolbar
-        //Toolbar toolBar = (Toolbar)findViewById(R.id.toolbar);
-        //setSupportActionBar(toolBar);
+        Toolbar toolBar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         // Obtain the shared Tracker instance.
         /*final Tracker t = ((MainApplication) getApplication())
                 .getTracker(MainApplication.TrackerName.APP_TRACKER);*/
-
-        //t.setScreenName("Verifikasi");
-        //t.send(new HitBuilders.AppViewBuilder().build());
+        /*t.setScreenName("Verifikasi");
+        t.send(new HitBuilders.AppViewBuilder().build());*/
 
         pref = getApplicationContext().getSharedPreferences("AtadResu", MODE_PRIVATE);
         editor = pref.edit();
 
-        if(pref.contains("nik") && pref.contains("nama")){
+        if(pref.contains("nik")){
             Intent intent = new Intent(this, Aduin.class);
             startActivity(intent);
-            //Intent intent = new Intent(this, MainMenu.class);
-            //startActivity(intent);
             finish();
         }
 
         nik = (EditText)findViewById(R.id.txtNIK);
-        nama = (EditText)findViewById(R.id.txtNama);
 
         checkNetwork();
 
@@ -93,16 +91,15 @@ public class VerifikasiNIK extends AppCompatActivity {
             public void onClick(View v) {
                 //startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
                 //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                if(!nik.getText().toString().equals("") || !nama.getText().toString().equals("")) {
+                if(!nik.getText().toString().equals(""))) {
                     //t.send(new HitBuilders.EventBuilder()
-                            
-                            //.setCategory("Action")
-                            //.setAction("Login")
-                            //.build());
+                            /*.setCategory("Action")
+                            .setAction("Login")
+                            .build());*/
                     if(checkNetwork())
                         new Login().execute();
                 }else{
-                    DialogMessage("Masukkan terlebih dahulu NIK dan Nama Lengkap Anda.");
+                    DialogMessage("Masukkan terlebih dahulu NIK Lengkap Anda.");
                 }
             }
         });
@@ -111,7 +108,7 @@ public class VerifikasiNIK extends AppCompatActivity {
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }*/
 
@@ -123,18 +120,16 @@ public class VerifikasiNIK extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-
-        //if (id == R.id.action_settings) {
-            //return true;
-        //}
-
+        /*if (id == R.id.action_settings) {
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
 
     private class Login extends AsyncTask<Void, Void, Void> {
 
-        String nikLogin, namaLogin;
+        String nikLogin;
         InputStream is;
         StringBuilder sb;
         String result = null;
@@ -144,10 +139,8 @@ public class VerifikasiNIK extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             nikLogin = nik.getText().toString();
-            namaLogin = nama.getText().toString();
             is = null;
             sb = null;
-
             loading = new ProgressDialog(VerifikasiNIK.this);
             loading.setTitle("Tunggu Sebentar");
             loading.setMessage("Melakukan Autentifikasi . . .");
@@ -159,12 +152,12 @@ public class VerifikasiNIK extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("nik", nikLogin));
-            //nameValuePairs.add(new BasicNameValuePair("nama", StringHelper.upperCase(namaLogin)));
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(MainApplication.urlVerifikasi);
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpClient.execute(httpPost);
+                //HttpPost httpPost = new HttpPost(MainApplication.urlVerifikasi);
+                HttpGet httpGet = new HttpGet(MainApplication.urlVerifikasi+"&nik="+nikLogin);
+                //httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpClient.execute(HttpGet);
                 HttpEntity entity = response.getEntity();
                 is = entity.getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"),8);
@@ -198,42 +191,23 @@ public class VerifikasiNIK extends AppCompatActivity {
                 Log.i("JSON", "> " + result);
                 JSONObject dataObj = new JSONObject(result);
                 Log.i("JSON"," status : "+dataObj.getInt("status"));
-                if (dataObj.getInt("status") == 1) {
+                if (dataObj.getInt("status") == 2) {
                     JSONObject data = dataObj.getJSONObject("data");
                     //editor.putString("no_tps", data.getString("noTPS"));
                     editor.putString("nik", data.getString("nik"));
-                    editor.putString("nama", data.getString("nama"));
-                    //editor.putString("tempat_lahir", data.getString("kel"));
-                    //editor.putString("tgl_lahir", data.getString("tanggal lahir"));
-                    //editor.putString("tgl_lahir", "");
-                    //editor.putString("jk", data.getString("jenis_kelamin"));
-                    //editor.putString("alamat", data.getString("kel"));
-                    //editor.putString("rt", data.getString("rt"));
-                    //editor.putString("rw", data.getString("rw"));
-                    //editor.putString("rt", "");
-                    //editor.putString("rw", "");
-                    //editor.putString("dusun", "");
-                    //editor.putString("dusun", data.getString("dusun"));
-                    editor.putString("kelurahan", data.getString("kel"));
-                    editor.putString("kecamatan", data.getString("kec"));
-                    //editor.putString("kabupaten_kota", data.getString("kab"));
-                    //editor.putString("provinsi", data.getString("pro"));
                     editor.commit();
-
                     Intent intent = new Intent(VerifikasiNIK.this, Aduin.class);
                     startActivity(intent);
-
-
                     finish();
-                }else if(dataObj.getInt("status") == 0) {
+                /*}else if(dataObj.getInt("status") == 0) {
                     //Toast.makeText(MainActivity.this,"Maaf Login gagal. Silakan coba beberapa saat lagi.", Toast.LENGTH_LONG).show();
                     DialogMessage("Maaf Login gagal. Silakan coba beberapa saat lagi.");
                 }else if(dataObj.getInt("status") == 2) {
                     //Toast.makeText(MainActivity.this,"Maaf Anda bukan warga Surabaya", Toast.LENGTH_LONG).show();
-                    DialogMessage("Maaf Anda bukan warga Surabaya");
+                    DialogMessage("Maaf Anda bukan warga Surabaya"); */
                 }else {
                     //Toast.makeText(MainActivity.this,"Maaf Nama yang Anda masukkan tidak cocok!", Toast.LENGTH_LONG).show();
-                    DialogMessage("Maaf Nama yang Anda masukkan tidak cocok!");
+                    DialogMessage("Maaf NIK yang anda masukkan salah!");
                 }
 
             } catch (JSONException e) {

@@ -1,4 +1,4 @@
-﻿package com.aduinaja.aduinaja;
+package com.aduinaja.aduinaja;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
-
 
 import com.aduinaja.application.MainApplication;
 import com.facebook.AccessToken;
@@ -53,8 +52,6 @@ import java.util.ArrayList;
 
 import network.Base64;
 
-import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         if(sp.contains("id_fb")){
             String isid = sp.getString("id_fb", "");
             if(!isid.equals("")){
-                startActivity(new Intent(this, Aduin.class));
+                startActivity(new Intent(this, VerifikasiNIK.class));
                 finish();
             }
         }else {
@@ -82,17 +79,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                    // App code
-
-                    // login ok get access token
 
                 GraphRequest request = GraphRequest.newMeRequest(
                         AccessToken.getCurrentAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
-
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-
+                            public void onCompleted(JSONObject object,
+                                                    GraphResponse response) {
 
                                 if (BuildConfig.DEBUG) {
                                     FacebookSdk.setIsDebugEnabled(true);
@@ -104,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                                                     + AccessToken
                                                     .getCurrentAccessToken()
                                                     .toString());
-
                                     /*Profile.getCurrentProfile().getId();
                                     Profile.getCurrentProfile().getFirstName();
                                     Profile.getCurrentProfile().getLastName();
@@ -121,21 +113,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                 request.executeAsync();
-
-                /*  Bundle parameters = new Bundle();
-                    parameters
-                            .putString("fields",
-                                    "id,firstName,lastName,name,email,gender,birthday,address");
-                    request.setParameters(parameters);
-
-
-
-                    Intent loginintent = new Intent(getActivity(),
-                            EditProfile.class);
-                    startActivity(loginintent);
-                    System.out.println("XXXX " + getId());
-                 */
-                    //makeJsonObjReq();
 
             }
 
@@ -254,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
 
                     loading.dismiss();
-                    Intent next = new Intent(MainActivity.this, Aduin.class );
+                    Intent next = new Intent(MainActivity.this, VerifikasiNIK.class );
                     startActivity(next);
                 }
             } catch (JSONException e) {
