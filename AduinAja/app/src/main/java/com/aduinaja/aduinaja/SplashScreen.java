@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.aduinaja.application.MainApplication;
+import com.aduinaja.util.PrefMgr;
 import com.rey.material.app.ThemeManager;
 import com.rey.material.widget.ProgressView;
 
@@ -30,6 +31,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import database.DataStore;
+import network.api.RetrofitApi;
+import network.api.RetrofitApiSingleton;
 
 /**
  * Created by Triyandi on 03/02/2016.
@@ -47,6 +50,9 @@ public class SplashScreen extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        PrefMgr.getInstance().init(this);
+        RetrofitApiSingleton.getInstance().init("http://adm.aduinaja.com/");
 
         setContentView(R.layout.splashscreen);
         ThemeManager.init(this, 2, 0, null);

@@ -91,12 +91,12 @@ public class WelcomeScreen extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == TOTAL_PAGES - 2 && positionOffset > 0) {
                     if (isOpaque) {
-                        pager.setBackgroundColor(ContextCompat.getColor(WelcomeScreen.this, R.color.colorPrimaryQuarter));
+                        pager.setBackgroundColor(ContextCompat.getColor(WelcomeScreen.this, R.color.putih));
                         isOpaque = false;
                     }
                 } else {
                     if (!isOpaque) {
-                        pager.setBackgroundColor(ContextCompat.getColor(WelcomeScreen.this,R.color.colorPrimary));
+                        pager.setBackgroundColor(ContextCompat.getColor(WelcomeScreen.this,R.color.putih));
                         isOpaque = true;
                     }
                 }
@@ -109,6 +109,10 @@ public class WelcomeScreen extends AppCompatActivity {
                     btnSkip.setVisibility(View.GONE);
                     btnNext.setVisibility(View.GONE);
                     btnDone.setVisibility(View.VISIBLE);
+                } else if (position < TOTAL_PAGES - 2) {
+                    btnSkip.setVisibility(View.VISIBLE);
+                    btnNext.setVisibility(View.VISIBLE);
+                    btnDone.setVisibility(View.GONE);
                 } else if (position < TOTAL_PAGES - 2) {
                     btnSkip.setVisibility(View.VISIBLE);
                     btnNext.setVisibility(View.VISIBLE);

@@ -255,6 +255,7 @@ public class LihatAduan extends Fragment {
                                     data.getJSONObject(i).getJSONObject("aduan").getString("tanggal_aduan"),
                                     data.getJSONObject(i).getJSONObject("aduan").getString("img"),
                                     data.getJSONObject(i).getJSONObject("aduan").getString("judul"),
+                                    data.getJSONObject(i).getJSONObject("aduan").getString("deskripsi"),
                                     data.getJSONObject(i).getJSONObject("aduan").getString("status"),
                                     data.getJSONObject(i).getString("up_vote"),
                                     data.getJSONObject(i).getString("down_vote"),

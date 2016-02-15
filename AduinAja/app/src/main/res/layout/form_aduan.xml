@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -63,10 +56,16 @@
                     android:layout_marginBottom="30dp"/>
 
                 <com.rey.material.widget.Button
-                    android:id="@+id/btn_kategori"
+                android:id="@+id/btn_kategori"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pilih kategori"/>
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/btn_kecamatan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pilih kategori"/>
+                    android:text="Pilih kecamatan"/>
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnAduin"

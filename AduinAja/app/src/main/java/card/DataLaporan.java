@@ -9,8 +9,9 @@ public class DataLaporan {
     private String imgAvatar;
     private String nama;
     private String waktu;
-    private String imgPost;
+    private String img;
     private String title;
+    private String deskripsi;
     private String status;
     private String upVote;
     private String downVote;
@@ -18,13 +19,13 @@ public class DataLaporan {
     private String category;
     private Context context;
 
-    public DataLaporan(String imgAvatar, String nama, String waktu, String imgPost, String title, String status, String upVote, String downVote, String comments, String category, Context context) {
-
+    public DataLaporan(String imgAvatar, String nama, String waktu, String img, String title, String deskripsi, String status, String upVote, String downVote, String comments, String category, Context context) {
         this.imgAvatar = imgAvatar;
         this.nama = nama;
         this.waktu = waktu;
-        this.imgPost = imgPost;
+        this.img = img;
         this.title = title;
+        this.deskripsi = deskripsi;
         this.status = status;
         this.upVote = upVote;
         this.downVote = downVote;
@@ -57,12 +58,12 @@ public class DataLaporan {
         this.waktu = waktu;
     }
 
-    public String getImgPost() {
-        return imgPost;
+    public String getImg() {
+        return img;
     }
 
-    public void setImgPost(String imgPost) {
-        this.imgPost = imgPost;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getTitle() {
@@ -71,6 +72,14 @@ public class DataLaporan {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
     }
 
     public String getStatus() {
@@ -106,11 +115,11 @@ public class DataLaporan {
     }
 
     public String getCategory() {
-        return comments;
+        return category;
     }
 
     public void setCategory(String category) {
-        this.comments = category;
+        this.category = category;
     }
 
     public Context getContext() {

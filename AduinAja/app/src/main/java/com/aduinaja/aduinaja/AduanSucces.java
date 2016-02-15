@@ -26,10 +26,10 @@ public class AduanSucces extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
-        final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_ab_up_compat);
+        /*final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_ab_up_compat);
         upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         Button btnLagi = (com.rey.material.widget.Button)findViewById(R.id.btn_aduan_lain);
         Button btnKembali = (Button)findViewById(R.id.btn_kembali);
@@ -51,7 +51,8 @@ public class AduanSucces extends AppCompatActivity {
         btnKembali.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(getBaseContext(), TabFragment.class);
+                startActivity(intent);
             }
         });
 

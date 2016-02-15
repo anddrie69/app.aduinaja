@@ -2,22 +2,17 @@ package com.aduinaja.aduinaja;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View.OnClickListener;
 
-import com.aduinaja.application.MainApplication;
-import com.aduinaja.application.StringHelper;
+import com.aduinaja.util.PrefMgr;
 import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.app.SimpleDialog;
@@ -25,84 +20,90 @@ import com.rey.material.app.ThemeManager;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.EditText;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+
+import network.api.RetrofitApi;
+import network.api.RetrofitApiSingleton;
+import network.model.VerNik;
+import retrofit2.Call;
 
 /**
  * Created by Triyandi on 08/02/2016.
  */
-public class VerifikasiNIK extends AppCompatActivity {
+public class VerifikasiNIK extends AppCompatActivity implements OnClickListener{
 
-    EditText nik;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+//    SharedPreferences pref;
+//    SharedPreferences.Editor editor;
+
+    private RetrofitApi api;
+
+    private Button btnLogin;
+    private EditText txtNik;
+
+    private String nik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PrefMgr.getInstance().init(this);
+
         setContentView(R.layout.verifikasi_nik);
 
+        api = RetrofitApiSingleton.getInstance().getApi();
+
+//        Call<List<Category>> call = api.getCategoryList();
+//        try {
+//            List<Category> categoryList = call.execute().body();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        initViews();
+        initListeners();
+
+        String nikPref = PrefMgr.getInstance().getNik();
+        if(null != nikPref) {
+//            if (nikPref.contains("nik")) {
+//                Intent intent = new Intent(this, Aduin.class);
+            Intent intent = new Intent(this, TabFragment.class);
+                startActivity(intent);
+                finish();
+//            }
+        }
+
+//        pref = getApplicationContext().getSharedPreferences("AtadResu", MODE_PRIVATE);
+//        editor = pref.edit();
+//
+//        if(pref.contains("nik")){
+//            Intent intent = new Intent(this, Aduin.class);
+//            startActivity(intent);
+//            finish();
+//        }
+
+        checkNetwork();
+    }
+
+    private void initViews(){
         ThemeManager.init(this, 2, 0, null);
         //Setting up the toolbar
-        Toolbar toolBar = (Toolbar)findViewById(R.id.toolbar);
+        /*Toolbar toolBar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
         // Obtain the shared Tracker instance.
         /*final Tracker t = ((MainApplication) getApplication())
                 .getTracker(MainApplication.TrackerName.APP_TRACKER);*/
         /*t.setScreenName("Verifikasi");
         t.send(new HitBuilders.AppViewBuilder().build());*/
 
-        pref = getApplicationContext().getSharedPreferences("AtadResu", MODE_PRIVATE);
-        editor = pref.edit();
+        btnLogin = (Button)findViewById(R.id.btnLogin);
+        txtNik = (EditText)findViewById(R.id.txtNIK);
+    }
 
-        if(pref.contains("nik")){
-            Intent intent = new Intent(this, Aduin.class);
-            startActivity(intent);
-            finish();
-        }
-
-        nik = (EditText)findViewById(R.id.txtNIK);
-
-        checkNetwork();
-
-
-        Button btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
-                //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                if(!nik.getText().toString().equals(""))) {
-                    //t.send(new HitBuilders.EventBuilder()
-                            /*.setCategory("Action")
-                            .setAction("Login")
-                            .build());*/
-                    if(checkNetwork())
-                        new Login().execute();
-                }else{
-                    DialogMessage("Masukkan terlebih dahulu NIK Lengkap Anda.");
-                }
-            }
-        });
+    private void initListeners(){
+        btnLogin.setOnClickListener(this);
     }
 
     /*@Override
@@ -127,9 +128,27 @@ public class VerifikasiNIK extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class Login extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onClick(View v) {
+        if(v == btnLogin){
+            String nik = txtNik.getText().toString();
+            if(!TextUtils.isEmpty(nik)){
+                //t.send(new HitBuilders.EventBuilder()
+                            /*.setCategory("Action")
+                            .setAction("Login")
+                            .build());*/
+                if(checkNetwork()) {
+                    new Login().execute(nik);
+                }
+            }else{
+                DialogMessage("Masukkan terlebih dahulu NIK dan Nama Lengkap Anda.");
+            }
+        }
+    }
 
-        String nikLogin;
+    private class Login extends AsyncTask<String, Void, VerNik> {
+
+        String nikLogin, namaLogin;
         InputStream is;
         StringBuilder sb;
         String result = null;
@@ -138,7 +157,7 @@ public class VerifikasiNIK extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            nikLogin = nik.getText().toString();
+//            nikLogin = nik.getText().toString();
             is = null;
             sb = null;
             loading = new ProgressDialog(VerifikasiNIK.this);
@@ -149,74 +168,39 @@ public class VerifikasiNIK extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-            nameValuePairs.add(new BasicNameValuePair("nik", nikLogin));
+        protected VerNik doInBackground(String... params) {
+            String nik = params[0];
+            String idFb = PrefMgr.getInstance().getIdFb();
+            Call<VerNik> callVerNik = api.getVerNIK(nik,idFb);
+            VerNik verNik = null;
             try {
-                HttpClient httpClient = new DefaultHttpClient();
-                //HttpPost httpPost = new HttpPost(MainApplication.urlVerifikasi);
-                HttpGet httpGet = new HttpGet(MainApplication.urlVerifikasi+"&nik="+nikLogin);
-                //httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                HttpResponse response = httpClient.execute(HttpGet);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"),8);
-                sb = new StringBuilder();
-                sb.append(reader.readLine() + "\n");
-                String line = "0";
-                while((line = reader.readLine()) != null){
-                    sb.append(line + "\n");
-                }
-                is.close();
-                result = sb.toString();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                verNik = callVerNik.execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (Exception e){
-                DialogMessage("Terjadi masalah dengan sambungan internet Anda. Silakan coba beberapa saat.");
             }
-            return null;
+            return verNik;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(VerNik verNik) {
+            super.onPostExecute(verNik);
             loading.dismiss();
-            try {
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("AtadResu", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                Log.i("JSON", "> " + result);
-                JSONObject dataObj = new JSONObject(result);
-                Log.i("JSON"," status : "+dataObj.getInt("status"));
-                if (dataObj.getInt("status") == 2) {
-                    JSONObject data = dataObj.getJSONObject("data");
-                    //editor.putString("no_tps", data.getString("noTPS"));
-                    editor.putString("nik", data.getString("nik"));
-                    editor.commit();
+            if(null != verNik){
+                if(verNik.getStatus().equals("2")){
+                    PrefMgr.getInstance().saveNik(verNik.getVerNikData().getNik());
+                    PrefMgr.getInstance().saveNik(verNik.getVerNikData().getNama());
+
                     Intent intent = new Intent(VerifikasiNIK.this, Aduin.class);
                     startActivity(intent);
                     finish();
-                /*}else if(dataObj.getInt("status") == 0) {
-                    //Toast.makeText(MainActivity.this,"Maaf Login gagal. Silakan coba beberapa saat lagi.", Toast.LENGTH_LONG).show();
-                    DialogMessage("Maaf Login gagal. Silakan coba beberapa saat lagi.");
-                }else if(dataObj.getInt("status") == 2) {
-                    //Toast.makeText(MainActivity.this,"Maaf Anda bukan warga Surabaya", Toast.LENGTH_LONG).show();
-                    DialogMessage("Maaf Anda bukan warga Surabaya"); */
-                }else {
-                    //Toast.makeText(MainActivity.this,"Maaf Nama yang Anda masukkan tidak cocok!", Toast.LENGTH_LONG).show();
-                    DialogMessage("Maaf NIK yang anda masukkan salah!");
+                }else{
+                    DialogMessage("Maaf NIK yang Anda masukkan salah!");
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
+            }else{
                 DialogMessage("Maaf terjadi kesalahan dengan jaringan Anda. Silakan coba beberapa saat lagi");
             }
-        }
 
+        }
     }
 
     private boolean checkNetwork(){

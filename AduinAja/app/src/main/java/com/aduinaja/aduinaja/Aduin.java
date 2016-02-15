@@ -29,8 +29,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,6 +49,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -67,6 +66,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import database.DataStore;
@@ -74,6 +74,13 @@ import lib.BitmapHelper;
 import lib.CameraIntentHelper;
 import lib.CameraIntentHelperCallback;
 import network.Base64;
+import network.api.RetrofitApi;
+import network.api.RetrofitApiSingleton;
+import network.model.Aduan;
+import network.model.Category;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -90,7 +97,8 @@ public class Aduin extends AppCompatActivity {
     Uri imageUri;
     private Bitmap bitmap;
     LinearLayout linear;
-    EditText deskripsi;
+    private EditText etDeskripsi;
+    private EditText etHeadline;
     //int kelurahan = 0, kecamatan = 0, tps = 0;
     DataStore db;
     SharedPreferences pref;
@@ -103,20 +111,28 @@ public class Aduin extends AppCompatActivity {
     Bitmap rotateBitmap;
     //Tracker t;
 
+    private Button btnAduin;
+
+    private List<Category.CategoryDatum> categoryDatumList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_aduan);
 
+        RetrofitApiSingleton.getInstance().init("http://adm.aduinaja.com/");
+
         ThemeManager.init(this, 2, 0, null);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         /*setSupportActionBar(toolbar);*/
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
+        //toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_ab_up_compat);
         upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        new GetCategory().execute(new Void[0]);
 
         progressBar = new ProgressDialog(this);
 
@@ -135,7 +151,9 @@ public class Aduin extends AppCompatActivity {
 
         pic = (ImageView)findViewById(R.id.pic);
         linear = (LinearLayout)findViewById(R.id.linear);
-        deskripsi = (EditText)findViewById(R.id.deskripsi);
+        etDeskripsi = (EditText)findViewById(R.id.deskripsi);
+        btnAduin = (Button)findViewById(R.id.btnAduin);
+        etHeadline = (EditText)findViewById(R.id.headline);
 
         checkNetwork();
 
@@ -190,22 +208,17 @@ public class Aduin extends AppCompatActivity {
             public void onClick(View v) {
                 btnKategori.setEnabled(false);
 
-                ArrayList<ArrayList<Object>> dataKategori = db.getKategori();
-                Log.i("items", "> "+dataKategori.toString());
-                String[] items = new String[dataKategori.size()];
-                final int[] id = new int[dataKategori.size()];
-                for (int i = 0; i < dataKategori.size(); i++) {
-                    ArrayList<Object> baris = dataKategori.get(i);
-                    id[i] = Integer.parseInt(baris.get(0).toString());
-                    items[i] = baris.get(1).toString();
-                    Log.i("items", "> "+id[i]+" "+items[i]);
+                String[] categoryItemTitles = new String[categoryDatumList.size()];
+                for(int i = 0 ; i < categoryDatumList.size() ; i++){
+                    categoryItemTitles[i] = categoryDatumList.get(i).getNama();
                 }
 
                 builder = new SimpleDialog.Builder(isLightTheme ? R.style.SimpleDialogLight : R.style.SimpleDialog) {
                     @Override
                     public void onPositiveActionClicked(DialogFragment fragment) {
                         btnKategori.setText("Kategori : " + getSelectedValue());
-                        kategori = id[getSelectedIndex()];
+//                        kategori = id[getSelectedIndex()];
+                        kategori = Integer.parseInt(categoryDatumList.get(getSelectedIndex()).getId());
                         Log.i("kategori","> "+kategori);
                         //Toast.makeText(Laporkan1.this, "Kategori : " + getSelectedValue(), Toast.LENGTH_SHORT).show();
                         super.onPositiveActionClicked(fragment);
@@ -218,7 +231,7 @@ public class Aduin extends AppCompatActivity {
                     }
                 };
 
-                ((SimpleDialog.Builder) builder).items(items, 0)
+                ((SimpleDialog.Builder) builder).items(categoryItemTitles, 0)
                         .title("Kategori")
                         .positiveAction("Pilih")
                         .negativeAction("Batal");
@@ -226,6 +239,14 @@ public class Aduin extends AppCompatActivity {
                 DialogFragment fragment = DialogFragment.newInstance(builder);
                 fragment.show(getSupportFragmentManager(), null);
                 btnKategori.setEnabled(true);
+            }
+        });
+
+        btnAduin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Aduin.this, AduanSucces.class);
+                startActivity(intent);
             }
         });
 
@@ -331,7 +352,7 @@ public class Aduin extends AppCompatActivity {
         return mediaFile;
     }
 
-    /*@Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_laporan, menu);
@@ -349,14 +370,14 @@ public class Aduin extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.btnAduin:
-                if(kategori != 0 && !deskripsi.getText().toString().equals("")) {
-                    try {
-                        /*Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+                if(kategori != 0 && !etDeskripsi.getText().toString().equals("")) {
+                    /*try {
+                        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                                 new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false, null, null, null, null);
-                        startActivityForResult(intent,ACCOUNT_REQUEST_CODE);*/
+                        startActivityForResult(intent,ACCOUNT_REQUEST_CODE);
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }else{
                     Toast.makeText(this,"Maaf, Anda harus melengkapi semua data yang ada", Toast.LENGTH_LONG).show();
                 }
@@ -521,7 +542,7 @@ public class Aduin extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             sb = null;
-            desc = deskripsi.getText().toString();
+            desc = etDeskripsi.getText().toString();
             loading.setMessage("Mengirim Aduan");
             loading.show();
             progressBar.setProgress(0);
@@ -555,12 +576,12 @@ public class Aduin extends AppCompatActivity {
             String ba1 = Base64.encodeBytes(ba);
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("nik", pref.getString("nik", "")));
-            nameValuePairs.add(new BasicNameValuePair("email", email));
+            //nameValuePairs.add(new BasicNameValuePair("email", email));
             nameValuePairs.add(new BasicNameValuePair("laporan",desc));
             nameValuePairs.add(new BasicNameValuePair("kategori",String.valueOf(kategori)));
-            nameValuePairs.add(new BasicNameValuePair("foto",ba1));
+            //nameValuePairs.add(new BasicNameValuePair("foto",ba1));
             nameValuePairs.add(new BasicNameValuePair("filename",pref.getString("nik","")+"-"+String.valueOf(System.currentTimeMillis())+".jpg"));
-            nameValuePairs.add(new BasicNameValuePair("telepon",phone));
+
             nameValuePairs.add(new BasicNameValuePair("imei",imei));
 
             // Extra parameters if you want to pass to server
@@ -569,7 +590,7 @@ public class Aduin extends AppCompatActivity {
                 HttpPost httpPost = new HttpPost(MainApplication.urlAduan);
                 //totalSize = entity.getContentLength();
                 httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                //httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                //httpGet.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpClient.execute(httpPost);
                 HttpEntity entity2 = response.getEntity();
                 is = entity2.getContent();
@@ -699,4 +720,24 @@ public class Aduin extends AppCompatActivity {
         fragment.show(getSupportFragmentManager(), null);
     }
 
+    private class GetCategory extends AsyncTask<Void, Void, Call<Category>>{
+
+        @Override
+        protected Call<Category> doInBackground(Void... params) {
+            RetrofitApi api = RetrofitApiSingleton.getInstance().getApi();
+            Call<Category> callCategory = api.getCategoryList();
+            try {
+                Category category = callCategory.execute().body();
+                categoryDatumList = category.getCategoryDatumList();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return callCategory;
+        }
+
+        @Override
+        protected void onPostExecute(Call<Category> aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
 }

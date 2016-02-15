@@ -9,10 +9,12 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Window;
 
 import com.aduinaja.application.MainApplication;
+import com.aduinaja.util.PrefMgr;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -55,31 +57,36 @@ import network.Base64;
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
+    LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PrefMgr.getInstance().init(this);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
-        setContentView(R.layout.loginfb);
-        SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sp.edit();
-        if(sp.contains("id_fb")){
-            String isid = sp.getString("id_fb", "");
-            if(!isid.equals("")){
-                startActivity(new Intent(this, VerifikasiNIK.class));
-                finish();
-            }
-        }else {
 
+        setContentView(R.layout.loginfb);
+
+        String idFb = PrefMgr.getInstance().getIdFb();
+        if(!TextUtils.isEmpty(idFb)){
+               startActivity(new Intent(this, TabFragment.class));
+                finish();
         }
+
+        initViews();
+        initListeners();
+    }
+
+    private void initViews(){
         ThemeManager.init(this, 2, 0, null);
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = (LoginButton)findViewById(R.id.login_button);
+    }
+
+    private void initListeners(){
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-
                 GraphRequest request = GraphRequest.newMeRequest(
                         AccessToken.getCurrentAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -92,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
                                     FacebookSdk
                                             .addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
-                                    System.out
-                                            .println("AccessToken.getCurrentAccessToken()"
-                                                    + AccessToken
-                                                    .getCurrentAccessToken()
-                                                    .toString());
+//                                    System.out
+//                                            .println("AccessToken.getCurrentAccessToken()"
+//                                                    + AccessToken
+//                                                    .getCurrentAccessToken()
+//                                                    .toString());
                                     /*Profile.getCurrentProfile().getId();
                                     Profile.getCurrentProfile().getFirstName();
                                     Profile.getCurrentProfile().getLastName();
@@ -105,15 +112,19 @@ public class MainActivity extends AppCompatActivity {
                                     //String email=UserManager.asMap().get(“email”).toString();
                                 }
 
-                                new Register(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getFirstName()+"%20"+Profile.getCurrentProfile().getLastName(),"").execute();
-                                editor.putString("id_fb", Profile.getCurrentProfile().getId());
-                                editor.commit();
-
-
+                                String id = Profile.getCurrentProfile().getId();
+//                                Profile.getCurrentProfile().getFirstName()+"%20"+Profile.getCurrentProfile().getLastName()
+                                String nama = String.format("%s%s%s",
+                                        Profile.getCurrentProfile().getFirstName(),
+                                        "%20",
+                                        Profile.getCurrentProfile().getLastName());
+                                new Register(id,nama,"").execute();
+//                                editor.putString("id_fb", Profile.getCurrentProfile().getId());
+//                                editor.commit();
+                                PrefMgr.getInstance().saveIdFb(Profile.getCurrentProfile().getId());
                             }
                         });
                 request.executeAsync();
-
             }
 
 
@@ -128,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
@@ -138,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Register extends AsyncTask<Void, Integer, String> {
-
-
         ProgressDialog loading;
         StringBuilder sb;
         String result = null;
@@ -231,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
 
                     loading.dismiss();
-                    Intent next = new Intent(MainActivity.this, VerifikasiNIK.class );
+                    Intent next = new Intent(MainActivity.this, TabFragment.class );
                     startActivity(next);
                 }
             } catch (JSONException e) {

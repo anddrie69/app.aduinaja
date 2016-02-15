@@ -17,7 +17,7 @@ public class MainApplication extends Application {
     public static String urlGetLaporan = mainUrl+"/backend/web/index.php?r=api/getaduan";
     public static String urlGetImages = mainUrl+"/backend/web/statics/aduan";
     public static String urlGetKategori = mainUrl+"/backend/web/index.php?r=api/getkategori";
-    public static String urlVerifikasi = mainUrl+"/backend/web/index.php?r=api/verifikasinik";
+    public static String urlVerifikasi = mainUrl+"/backend/web/index.php?r=api/verifikasinik&id=";
     private static MainApplication app;
 
     public static final String TAG = MainApplication.class.getSimpleName();

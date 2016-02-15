@@ -52,11 +52,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
                 .placeholder(ContextCompat.getDrawable(mDataset.get(position).getContext(), R.drawable.pp))
                 .into(viewHolder.imgAvatar);
         Picasso.with(mDataset.get(position).getContext())
-                .load(MainApplication.urlGetImages + mDataset.get(position).getImgPost())
-                .resize(360,540)
+                .load(MainApplication.urlGetImages + mDataset.get(position).getImg())
+                .resize(360, 540)
                 .centerCrop()
                 .placeholder(ContextCompat.getDrawable(mDataset.get(position).getContext(), R.drawable.img_post))
-                .into(viewHolder.imgPost);
+                .into(viewHolder.img);
+
         switch (mDataset.get(position).getStatus()){
             case "1":
                 viewHolder.txtStatus.setText("Diterima");
@@ -73,9 +74,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
         }
         viewHolder.txtStatus.setTextColor(Color.parseColor("#FFFFFF"));
         viewHolder.txtNama.setText(mDataset.get(position).getNama());
-        viewHolder.up_count.setText(mDataset.get(position).getUpVote());
+        //viewHolder.deskripsi.setText(mDataset.get(position).getDeskripsi());
+        /*viewHolder.up_count.setText(mDataset.get(position).getUpVote());
         viewHolder.down_count.setText(mDataset.get(position).getDownVote());
-        viewHolder.comment_count.setText(mDataset.get(position).getComments());
+        viewHolder.comment_count.setText(mDataset.get(position).getComments());*/
 
     }
 
@@ -101,17 +103,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
     public static class DataObjectHolder extends RecyclerView.ViewHolder {
         public ImageView imgAvatar;
         public TextView txtNama;
-        public ImageView imgPost;
+        public ImageView img;
+
         public TextView txtTitle;
         public TextView txtWaktu;
         public TextView txtStatus;
         public LinearLayout linear;
-        public LinearLayout LUp;
+        public TextView deskripsi;
+       /* public LinearLayout LUp;
         public LinearLayout LDown;
         public LinearLayout LComment;
         public TextView up_count;
         public TextView down_count;
-        public TextView comment_count;
+        public TextView comment_count;*/
 
 
         public DataObjectHolder(View itemView) {
@@ -119,16 +123,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.DataObjectHold
             imgAvatar = (ImageView)itemView.findViewById(R.id.imgAvatar);
             txtNama = (TextView)itemView.findViewById(R.id.txtNama);
             txtWaktu = (TextView)itemView.findViewById(R.id.txtWaktu);
-            imgPost = (ImageView)itemView.findViewById(R.id.imgPost);
+            img = (ImageView)itemView.findViewById(R.id.img);
+
             txtTitle = (TextView)itemView.findViewById(R.id.txtTitle);
             txtStatus = (TextView)itemView.findViewById(R.id.txtStatus);
             linear = (LinearLayout)itemView.findViewById(R.id.linear_status);
-            LUp = (LinearLayout)itemView.findViewById(R.id.linear_up);
+            deskripsi = (TextView)itemView.findViewById(R.id.deskripsi);
+            /*LUp = (LinearLayout)itemView.findViewById(R.id.linear_up);
             LDown = (LinearLayout)itemView.findViewById(R.id.linear_down);
             LComment = (LinearLayout)itemView.findViewById(R.id.linear_comment);
             up_count = (TextView)itemView.findViewById(R.id.up_count);
             down_count = (TextView)itemView.findViewById(R.id.down_count);
-            comment_count = (TextView)itemView.findViewById(R.id.comment_count);
+            comment_count = (TextView)itemView.findViewById(R.id.comment_count);*/
             Log.i(MainApplication.TAG, "Adding Listener");
         }
     }

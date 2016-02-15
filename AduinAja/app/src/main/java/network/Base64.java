@@ -1406,7 +1406,7 @@ public class Base64
     throws java.io.IOException {
         
         if( dataToEncode == null ){
-            throw new NullPointerException( "Data to encode was null." );
+            throw new NullPointerException( "VerNikData to encode was null." );
         }   // end iff
         
         OutputStream bos = null;

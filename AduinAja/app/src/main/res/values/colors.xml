@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="primary2">#cccccc</color>
+    <color name="primary_pressed">#ffffff</color>
+    <color name="ripple">#9e9e9e</color>
+    <color name="putih">#FFFFFF</color>
+
     <color name="colorPrimary">#1fa2ed</color>
     <color name="colorPrimaryDark">#1fa2ed</color>
     <color name="colorAccent">#FF4081</color>

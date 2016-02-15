@@ -222,7 +222,7 @@ public class CameraIntentHelper {
      * the result and try one of the following approaches.
      *
 	 * <b>Intent extra:</b>
-	 * Second, we try to get an image Uri from intent.getData() of the returning intent.
+	 * Second, we try to get an image Uri from intent.getVerNikData() of the returning intent.
      * If this is not successful either, we continue with step 3.
      *
 	 * <b>Default photo Uri:</b>

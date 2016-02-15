@@ -4,7 +4,7 @@
     <string name="screen2_desc">Laporkan kejadian disekitar Anda untuk diketahui oleh Pemerintah</string>
     <string name="screen3_desc">Pemerintah akan menerima aduan Anda dan melakukan investigasi serta tindak lanjut</string>
     <string name="about_aduin">Aplikasi pelaporan warga kepada Pemerintah Daerah, yang nantinya akan dilakukan investigasi aduan dan ditindaklanjuti oleh SKPD terkait.</string>
-    <string name="loginfb_desc">Silahkan login dengan facebook, \n untuk mendapatkan akses melihat Timeline Aduan \n Terima Kasih</string>
+    <string name="loginfb_desc">Silahkan login dengan facebook, untuk mendapatkan akses melihat Timeline Aduan Terima Kasih</string>
     <string name="facebook_app_id">900999039939643</string>
     <string name="about">AduinAja diambil dari kata Aduin dan Aja yang berarti kalimat perintah untuk mengadukan sesuatu.
     Dimana aplikasi ini menghubungan antara Pengadu (sebutan member) yang dalam konteks ini adalah masyarakat dengan Pemerintah Daerah atau
@@ -34,5 +34,6 @@
     <string name="error_sth_went_wrong">Something went wrong. Please try again.</string>
     <string name="btn_laporkan_kecurangan">Laporkan Kecurangan</string>
     <string name="pilih_kategori">Pilih Kategori</string>
+    <string name="action_settings">Aduin</string>
 
 </resources>
